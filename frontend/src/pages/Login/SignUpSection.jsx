@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BASE } from "../../../api.js";
 import { toast } from "react-toastify";
 import styles from "./LoginPage.module.css";
+import { useNavigate } from "react-router-dom";
 
 const SignupSection = ({ setstate }) => {
   const [password, setPassword] = useState("");
@@ -9,6 +10,7 @@ const SignupSection = ({ setstate }) => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const navigate = useNavigate();
 
   const checkPasswordStrength = (pass) => {
     const hasUpperCase = /[A-Z]/.test(pass);
@@ -71,7 +73,7 @@ const SignupSection = ({ setstate }) => {
       const data = await res.json();
       if (res.ok) {
         toast.success("Signup successful! Please log in.");
-        setstate(0);
+        navigate("/addProfile", { state: { data:data._id }})
       } else {
         toast.error("Signup failed.");
       }
