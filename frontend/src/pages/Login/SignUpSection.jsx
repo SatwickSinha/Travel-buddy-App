@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BASE } from "../../../api.js";
 import { toast } from "react-toastify";
+import styles from "./LoginPage.module.css";
 
 const SignupSection = ({ setstate }) => {
   const [password, setPassword] = useState("");
@@ -91,19 +92,19 @@ const SignupSection = ({ setstate }) => {
 
 
   return (
-    <form className="form-content" onSubmit={handleSignup}>
-      <div className="input-group">
+    <form className={styles.formContent} onSubmit={handleSignup}>
+      <div className={styles.inputGroup}>
         <input
           type="text"
           placeholder="First Name"
-          className="input-field"
+          className={styles.inputField}
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
         <input
           type="text"
           placeholder="Last Name"
-          className="input-field"
+          className={styles.inputField}
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
@@ -112,7 +113,7 @@ const SignupSection = ({ setstate }) => {
       <input
         type="email"
         placeholder="Email Address"
-        className="input-field"
+        className={styles.inputField}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -120,36 +121,35 @@ const SignupSection = ({ setstate }) => {
       <input
         type="password"
         placeholder="Create Password"
-        className="input-field"
+        className={styles.inputField}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <ul className="password-requirements">
+      <ul className={styles.passwordRequirements}>
         <li
-          className={passwordRequirements.isLongEnough ? "requirement-met" : ""}
+          className={passwordRequirements.isLongEnough ? styles.requirementMet : ""}
         >
           At least 8 characters
         </li>
         <li
-          className={passwordRequirements.hasUpperCase ? "requirement-met" : ""}
+          className={passwordRequirements.hasUpperCase ? styles.requirementMet : ""}
         >
           One uppercase letter
         </li>
         <li
-          className={passwordRequirements.hasLowerCase ? "requirement-met" : ""}
+          className={passwordRequirements.hasLowerCase ? styles.requirementMet : ""}
         >
           One lowercase letter
         </li>
         <li
-          className={passwordRequirements.hasNumbers ? "requirement-met" : ""}
+          className={passwordRequirements.hasNumbers ? styles.requirementMet : ""}
         >
           One number
         </li>
         <li
           className={
-            passwordRequirements.hasSpecialChar ? "requirement-met" : ""
-          }
+            passwordRequirements.hasSpecialChar ? styles.requirementMet : ""}
         >
           One special character
         </li>
@@ -158,18 +158,18 @@ const SignupSection = ({ setstate }) => {
       <input
         type="password"
         placeholder="Confirm Password"
-        className="input-field"
+        className={styles.inputField}
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
 
-      <div className="links-container">
-        <div to="/" className="link" onClick={() => setstate(0)}>
+      <div className={styles.linksContainer}>
+        <div to="/" className={styles.link} onClick={() => setstate(0)}>
           Already have an account?
         </div>
       </div>
 
-      <button className="login-button" type="submit">
+      <button className={styles.loginButton} type="submit">
         Create Account
       </button>
     </form>

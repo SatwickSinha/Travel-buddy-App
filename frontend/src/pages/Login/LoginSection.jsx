@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE } from "../../../api.js";
 import { toast } from "react-toastify";
 import { useUser } from "../../GlobalUserContext.jsx";
+import styles from "./LoginPage.module.css";
 
 const LoginSection = ({ setstate }) => {
   const [email, setEmail] = useState("");
@@ -84,38 +85,38 @@ const LoginSection = ({ setstate }) => {
   };
 
   return (
-    <form className="form-section" onSubmit={handleLogin}>
-      <div className="form-content">
+    <form className={styles.formSection} onSubmit={handleLogin}>
+      <div className={styles.formContent}>
         <input
           type="email"
           placeholder="Email Address"
-          className="input-field"
+          className={styles.inputField}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
-          className="input-field"
+          className={styles.inputField}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div className="links-container">
-          <Link to="/forgot-password" className="link">
+        <div className={styles.linksContainer}>
+          <Link to="/forgot-password" className={styles.link}>
             Forget Password
           </Link>
-          <div to="/signup" className="link" onClick={() => setstate(1)}>
+          <div to="/signup" className={styles.link} onClick={() => setstate(1)}>
             Create Account
           </div>
         </div>
-        <button className="login-button" type="submit">
+        <button className={styles.loginButton} type="submit">
           Log in
         </button>
 
-        <div className="divider">
-          <hr className="divider-line" />
-          <span className="divider-text">OR</span>
-          <hr className="divider-line" />
+        <div className={styles.divider}>
+          <hr className={styles.dividerLine} />
+          <span className={styles.dividerText}>OR</span>
+          <hr className={styles.dividerLine} />
         </div>
 
         <div id="google-signin-btn" style={{ marginTop: "16px" }}></div>

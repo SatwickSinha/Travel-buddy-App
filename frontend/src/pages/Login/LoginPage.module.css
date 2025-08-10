@@ -1,25 +1,14 @@
-.main-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
-
-.input-group {
+.inputGroup {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.input-group .input-field {
+.inputGroup .inputField {
   margin-bottom: 0;
 }
 
-.password-requirements {
+.passwordRequirements {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.8rem;
   margin: 0.5rem 0;
@@ -27,28 +16,28 @@
   list-style: none;
 }
 
-.password-requirements li {
+.passwordRequirements li {
   margin: 0.25rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.password-requirements li::before {
+.passwordRequirements li::before {
   content: "•";
   color: rgba(255, 255, 255, 0.3);
 }
 
-.requirement-met::before {
+.requirementMet::before {
   color: #4ade80 !important;
 }
 
-.requirement-met {
+.requirementMet {
   color: #4ade80;
 }
 
 /* ...rest of your signup page CSS... */
-.main-container {
+.mainContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,7 +55,7 @@
   backdrop-filter: blur(2px);
 }
 
-.login-card {
+.loginCard {
   position: relative;
   z-index: 10;
   width: 90%;
@@ -94,7 +83,7 @@
   }
 }
 
-.branding-section {
+.brandingSection {
   flex: 1;
   padding: 2rem;
   color: white;
@@ -117,7 +106,7 @@
   transform: scale(1.05);
 }
 
-.join-text {
+.joinText {
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -145,7 +134,7 @@
   animation: slideIn 0.5s ease-out 0.4s both;
 }
 
-.form-section {
+.formSection {
   flex: 1;
   padding: 2rem;
   background: rgba(255, 255, 255, 0.1);
@@ -154,16 +143,16 @@
   width: 50%;
 }
 
-.form-section:hover {
+.formSection:hover {
   transform: translateY(-5px);
 }
 
-.form-content {
+.formContent {
   max-width: 400px;
   margin: 0 auto;
 }
 
-.input-field {
+.inputField {
   box-sizing: border-box;
   width: 100%;
   padding: 1rem;
@@ -176,21 +165,21 @@
   transition: all 0.3s ease;
 }
 
-.input-field::placeholder {
+.inputField::placeholder {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.input-field:focus {
+.inputField:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.5);
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
 }
 
-.links-container {
+.linksContainer {
   display: flex;
   justify-content: space-between;
-  margin: 1.5rem 0;
+  margin: 0.5rem 0;
 }
 
 .link {
@@ -220,9 +209,9 @@
   width: 100%;
 }
 
-.login-button {
+.loginButton {
   width: 100%;
-  padding: 1rem;
+  padding: 0.8rem;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   border: none;
   border-radius: 8px;
@@ -235,7 +224,7 @@
   overflow: hidden;
 }
 
-.login-button:before {
+.loginButton:before {
   content: "";
   position: absolute;
   top: 0;
@@ -251,29 +240,29 @@
   transition: 0.5s;
 }
 
-.login-button:hover {
+.loginButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.login-button:hover:before {
+.loginButton:hover:before {
   left: 100%;
 }
 
 @media (max-width: 768px) {
-  .login-card {
+  .loginCard {
     flex-direction: column;
   }
 
-  .form-section {
+  .formSection {
     width: auto;
   }
 
-  .branding-section {
+  .brandingSection {
     text-align: center;
   }
 
-  .input-group {
+  .inputGroup {
     flex-direction: column;
   }
 }
@@ -285,7 +274,7 @@
   margin: 1.5rem 0;
 }
 
-.divider-line {
+.dividerLine {
   flex-grow: 1;
   height: 2px;
   border: none;
@@ -293,13 +282,13 @@
   margin: 0 0.5rem;
 }
 
-.divider-text {
+.dividerText {
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
   padding: 0 1rem;
 }
 
-.google-login-button {
+.googleLoginButton {
   width: 100%;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.1);
@@ -316,13 +305,13 @@
   transition: all 0.3s ease;
 }
 
-.google-login-button:hover {
+.googleLoginButton:hover {
   background-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.google-icon {
+.googleIcon {
   height: 1.25rem;
   width: 1.25rem;
 }
