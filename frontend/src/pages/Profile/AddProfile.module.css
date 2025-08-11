@@ -284,12 +284,8 @@
 .formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 25px;
+  gap: 20px;
   margin-bottom: 30px;
-}
-
-.formGroup {
-  margin-bottom: 25px;
 }
 
 .formGroup.fullWidth {
@@ -706,4 +702,11 @@ select {
 
 .error {
   border: 2px solid red;
+}
+
+input:disabled {
+  background-color: #d1d1d1;
+  color: #555;
+  cursor: default;         
+  border: 1px solid #ccc;  
 }

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId }, // Optional, since Mongo _id is enough
   name: { type: String, required: true },
   dob: { type: Date },
   profileRating: { type: Number, default: 0 },
@@ -15,12 +14,10 @@ const userSchema = new mongoose.Schema({
   pronouns: { type: String },
   religion: { type: String },
   bio: { type: String },
-  language: { type: String },
-  location: { type: String },
-  natureType: { type: String },
-  interestType: { type: String },
-
-  // Optional fields for OAuth login
+  language: { type: Array },
+  locationPref: { type: Array },
+  natureType: { type: Array },
+  interestType: { type: Array },
   password: { type: String },        
   googleId: { type: String },        
   createdAt: { type: Date, default: Date.now }

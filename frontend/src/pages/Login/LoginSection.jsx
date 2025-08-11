@@ -10,10 +10,15 @@ const LoginSection = ({ setstate }) => {
   const [password, setPassword] = useState("");
   const { state, dispatch } = useUser();
   const navigate = useNavigate();
+  const [isUserNew, setIsUserNew] = useState(false);
 
   useEffect(() => {
-    if (state.user != null && typeof state.user.username != 'undefined') {
-      navigate("/dashboard");
+    if (state.user != null && typeof state.user.username != "undefined") {
+      if (isUserNew) {
+        navigate("/addProfile");
+      } else {
+        navigate("/dashboard");
+      }
     }
   }, [state, navigate]);
 
@@ -74,10 +79,11 @@ const LoginSection = ({ setstate }) => {
       const data = await res.json();
       if (res.ok) {
         toast.success("Google Login Successful");
+        setIsUserNew(data.isUserNew);
         localStorage.setItem("userToken", data.token);
         dispatch({ type: "SET_USER", payload: data.user });
       } else {
-        toast.error(data.message || "Google login failed.");
+        toast.error("Google login failed.");
       }
     } catch (err) {
       toast.error("Google login failed. Please try again.");

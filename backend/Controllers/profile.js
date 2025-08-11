@@ -1,59 +1,65 @@
-import { User } from '../Modules/Schema.js';
+import { User } from "../Modules/Schema.js";
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("Error fetching user profile:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const {
       dob,
-      profileRating,
       gender,
       drinking,
       smoking,
       native,
       phoneNo,
       driving,
-      pronouns,
       religion,
       bio,
       language,
-      location,
+      locationPref,
       natureType,
-      interestType
+      interestType,
     } = req.body;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
         dob,
-        profileRating,
         gender,
         drinking,
         smoking,
         native,
         phoneNo,
         driving,
-        pronouns,
-        religion,
-        bio,
+        religion: religion || "",
+        bio: bio || "",
         language,
-        location,
+        locationPref,
         natureType,
-        interestType
+        interestType,
       },
-      { new: true, runValidators: true }
+      { new: true }
     );
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({
-      message: "Profile updated successfully",
-      user: updatedUser
-    });
-
+    res.status(200).json({ message: "Profile updated successfully" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to update profile" });
   }
 };

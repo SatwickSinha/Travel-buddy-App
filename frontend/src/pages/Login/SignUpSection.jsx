@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BASE } from "../../../api.js";
 import { toast } from "react-toastify";
 import styles from "./LoginPage.module.css";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../GlobalUserContext.jsx";
 
 const SignupSection = ({ setstate }) => {
   const [password, setPassword] = useState("");
@@ -11,6 +12,13 @@ const SignupSection = ({ setstate }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const navigate = useNavigate();
+  const { state } = useUser();
+
+  useEffect(() => {
+    if (state.user != null && typeof state.user.username != "undefined") {
+      navigate("/addProfile");
+    }
+  }, [state, navigate]);
 
   const checkPasswordStrength = (pass) => {
     const hasUpperCase = /[A-Z]/.test(pass);
@@ -47,12 +55,10 @@ const SignupSection = ({ setstate }) => {
       passwordRequirements.hasNumbers &&
       passwordRequirements.hasSpecialChar &&
       passwordRequirements.hasUpperCase &&
-      passwordRequirements.isLongEnough
-    ;
-
-    if (!requirementsMet){
-        toast.error("Password doesnt meet the requirments");
-        return;
+      passwordRequirements.isLongEnough;
+    if (!requirementsMet) {
+      toast.error("Password doesnt meet the requirments");
+      return;
     }
 
     if (password !== confirmPassword) {
@@ -73,7 +79,8 @@ const SignupSection = ({ setstate }) => {
       const data = await res.json();
       if (res.ok) {
         toast.success("Signup successful! Please log in.");
-        navigate("/addProfile", { state: { data:data._id }})
+        localStorage.setItem("userToken", data.token);
+        dispatch({ type: "SET_USER", payload: data.user });
       } else {
         toast.error("Signup failed.");
       }
@@ -82,16 +89,12 @@ const SignupSection = ({ setstate }) => {
     }
   };
 
-//   const headers = {
-//           "Content-Type": "application/json",
-//           Accept: "application/json",
-//           Origin: "*",
-//           Authorization: `Bearer ${localStorage.getItem(
-//             `userToken`
-//           )}`,
-//         };
-
-
+  //   const headers = {
+  //   "Content-Type": "application/json",
+  //   Accept: "application/json",
+  //   Origin: "*",
+  //   Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+  // };
 
   return (
     <form className={styles.formContent} onSubmit={handleSignup}>
@@ -130,28 +133,37 @@ const SignupSection = ({ setstate }) => {
 
       <ul className={styles.passwordRequirements}>
         <li
-          className={passwordRequirements.isLongEnough ? styles.requirementMet : ""}
+          className={
+            passwordRequirements.isLongEnough ? styles.requirementMet : ""
+          }
         >
           At least 8 characters
         </li>
         <li
-          className={passwordRequirements.hasUpperCase ? styles.requirementMet : ""}
+          className={
+            passwordRequirements.hasUpperCase ? styles.requirementMet : ""
+          }
         >
           One uppercase letter
         </li>
         <li
-          className={passwordRequirements.hasLowerCase ? styles.requirementMet : ""}
+          className={
+            passwordRequirements.hasLowerCase ? styles.requirementMet : ""
+          }
         >
           One lowercase letter
         </li>
         <li
-          className={passwordRequirements.hasNumbers ? styles.requirementMet : ""}
+          className={
+            passwordRequirements.hasNumbers ? styles.requirementMet : ""
+          }
         >
           One number
         </li>
         <li
           className={
-            passwordRequirements.hasSpecialChar ? styles.requirementMet : ""}
+            passwordRequirements.hasSpecialChar ? styles.requirementMet : ""
+          }
         >
           One special character
         </li>
@@ -166,7 +178,7 @@ const SignupSection = ({ setstate }) => {
       />
 
       <div className={styles.linksContainer}>
-        <div to="/" className={styles.link} onClick={() => setstate(0)}>
+        <div className={styles.link} onClick={() => setstate(0)}>
           Already have an account?
         </div>
       </div>
