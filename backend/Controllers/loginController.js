@@ -22,10 +22,9 @@ export const register = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully", _id: newUser._id });
   } catch (err) {
     console.log(err);
-
     res.status(500).json({ error: "Error registering user" });
   }
 };
@@ -37,11 +36,11 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid username" });
 
-    const match = bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: "Incorrect password" });
 
     const token = jwt.sign(
-      { id: user._id, username: user.username },
+      { id: user._id, username: user.name },
       SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -61,7 +60,7 @@ export const login = async (req, res) => {
 };
 
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers["Authorization"];
+  const authHeader = req.headers["authorization"] || req.headers["Authorization"];
   const token = authHeader?.split(" ")[1];
 
   if (!token) return res.status(401).json({ message: "No token provided" });
@@ -72,5 +71,20 @@ export const verifyToken = (req, res, next) => {
     next();
   } catch (err) {
     return res.status(403).json({ message: "Invalid token" });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("Error fetching user profile:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

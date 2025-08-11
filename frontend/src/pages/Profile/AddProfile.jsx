@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AddProfile.module.css";
+import { useLocation } from "react-router-dom";
 
 const AddProfile = () => {
+  const location = useLocation();
+  const userID = location.state?.data || null;
+  // if (!userID) {
+  //   return <div className={styles.error}>User ID is missing. Please try again.</div>;
+  // }
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [selectedLifestyle, setSelectedLifestyle] = useState(new Set());
@@ -134,8 +140,9 @@ const AddProfile = () => {
 
     // Here you would typically make an API call
     // Example: await createProfile(finalData);
+    
 
-    alert("🎉 Welcome to Travel Buddy! Your profile is now live!");
+    alert("🎉 Welcome to Travel Buddy! Your profile is now live!");        
   };
 
   const FloatingParticles = () => {

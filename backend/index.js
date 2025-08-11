@@ -3,7 +3,8 @@ import mongoose  from 'mongoose';
 import cors  from 'cors';
 import passport  from 'passport';
 import oauthRoutes  from './GoogleOauth/oauthRoutes.js';
-import { login, register, verifyToken } from './Controllers/loginController.js';
+import { login, register, verifyToken , getUserProfile} from './Controllers/loginController.js';
+import { updateProfile } from './Controllers/profile.js';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -27,6 +28,11 @@ app.get('/profile', verifyToken, (req, res) => {
     user: req.user
   });
 });
+// To add rest data in DB 
+app.post('/updateProfile', verifyToken,updateProfile);
+// Get request to fetch user profile
+app.get('/getUserProfile', verifyToken, getUserProfile);``
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
