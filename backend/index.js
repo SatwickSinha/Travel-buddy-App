@@ -6,7 +6,7 @@ import { login, register, verifyToken } from "./Controllers/loginController.js";
 import { updateProfile, getUserProfile } from "./Controllers/profile.js";
 
 // For file import and upload using multer and cloudinary
-import { upload } from "../middleware/multer_middleware.js";
+import { upload } from "./middleware/multer_middleware.js";
 import uploadFile from "./Controllers/upload.js";
 
 import dotenv from "dotenv";
