@@ -10,7 +10,7 @@ export const register = async (req, res) => {
   const { email, username, password } = req.body;
 
   try {
-    const existing = await User.findOne({ email });
+    const existing = await User.findOne({ $or: [{ email },{username}] });
     if (existing)
       return res.status(400).json({ message: "User already exists" });
 
@@ -70,6 +70,12 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Login failed" });
   }
 };
+
+// {
+//   "email": "test@example.com",
+//   "username": "john",
+//   "password": "123456"
+// }
 
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
