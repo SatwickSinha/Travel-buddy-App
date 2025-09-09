@@ -39,7 +39,7 @@ export const register = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ error: "Error registering user" });
+    res.status(500).json({ message: "Error registering user" });
   }
 };
 
@@ -50,7 +50,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid username" });
 
-    const match = bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: "Incorrect password" });
 
     const token = jwt.sign({ id: user._id, username: user.name }, SECRET_KEY, {
@@ -67,7 +67,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ error: "Login failed" });
+    res.status(500).json({ message: "Login failed" });
   }
 };
 

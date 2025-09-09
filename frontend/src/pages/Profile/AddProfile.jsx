@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AddProfile.module.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../../GlobalUserContext";
 import CreatableSelect from "react-select/creatable";
 import { customStyles, preferences } from "./var";
@@ -20,6 +20,8 @@ const AddProfile = () => {
   const [native, setNative] = useState([]);
   const [language, setLanguage] = useState([]);
   const [religion, setReligion] = useState([]);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const totalSteps = 9;
 
@@ -35,6 +37,24 @@ const AddProfile = () => {
     "Profile complete",
   ];
 
+  const checkPasswordStrength = (pass) => {
+  const hasUpperCase = /[A-Z]/.test(pass);
+  const hasLowerCase = /[a-z]/.test(pass);
+  const hasNumbers = /\d/.test(pass);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
+  const isLongEnough = pass.length >= 8;
+
+  return {
+    hasUpperCase,
+    hasLowerCase,
+    hasNumbers,
+    hasSpecialChar,
+    isLongEnough,
+  };
+  };
+
+  const passwordRequirements = checkPasswordStrength(password);
+
   const updateProgress = () => {
     const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
     return progress;
@@ -44,6 +64,17 @@ const AddProfile = () => {
     const newErrors = {};
 
     switch (currentStep) {
+      case 2:
+        const requirementsMet =
+          passwordRequirements.hasLowerCase &&
+          passwordRequirements.hasNumbers &&
+          passwordRequirements.hasSpecialChar &&
+          passwordRequirements.hasUpperCase &&
+          passwordRequirements.isLongEnough;          
+        if (!requirementsMet) {
+          newErrors.password = "Password doesnt meet the requirments";
+        }
+        break;
       case 3:
         if (!formData.phoneNo?.trim()) {
           newErrors.phoneNo = "Please Enter your phone number";
@@ -136,6 +167,7 @@ const AddProfile = () => {
   const completeProfile = async () => {
     const finalData = {
       ...formData,
+      password,
       drinking: selectedLifestyle.has("drinking"),
       smoking: selectedLifestyle.has("smoking"),
       driving: selectedLifestyle.has("driving"),
@@ -332,7 +364,7 @@ const AddProfile = () => {
                       friendly and approachable!
                     </p>
                   </div>
-                  <div className={styles.formGroup}>
+                  <div>
                     <label htmlFor="name">Full Name *</label>
                     <input
                       type="text"
@@ -349,6 +381,38 @@ const AddProfile = () => {
                     {errors.name && (
                       <div className={styles.errorMessage}>{errors.name}</div>
                     )}
+
+                  <label style={{marginTop:"20px"}}>Password *</label>
+                  <input
+                    type="password"
+                    placeholder="Create Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={`${styles.inputArea} ${
+                      errors.password ? styles.error : ""
+                    } `}
+                  />
+                  {errors.password && (
+                      <div className={styles.errorMessage}>{errors.password}</div>
+                    )}
+
+                  <ul className={styles.passwordRequirements}>
+                    <li className={passwordRequirements.isLongEnough? styles.requirementMet : ""}>
+                      At least 8 characters
+                    </li>
+                    <li className={passwordRequirements.hasUpperCase? styles.requirementMet : ""}>
+                      One uppercase letter
+                    </li>
+                    <li className={passwordRequirements.hasLowerCase? styles.requirementMet : ""}>
+                      One lowercase letter
+                    </li>
+                    <li className={passwordRequirements.hasNumbers? styles.requirementMet : ""}>
+                      One number
+                    </li>
+                    <li className={passwordRequirements.hasSpecialChar? styles.requirementMet : ""}>
+                      One special character
+                    </li>
+                  </ul>
                   </div>
                 </div>
               )}

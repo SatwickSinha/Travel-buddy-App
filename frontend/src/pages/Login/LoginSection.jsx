@@ -15,7 +15,7 @@ const LoginSection = ({ setstate }) => {
   useEffect(() => {
     if (state.user != null && typeof state.user.username != "undefined") {
       if (isUserNew) {
-        navigate("/addProfile");
+        navigate("/CreateProfile");
       } else {
         navigate("/dashboard");
       }
