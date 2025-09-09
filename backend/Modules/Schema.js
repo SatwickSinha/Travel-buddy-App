@@ -19,8 +19,9 @@ const userSchema = new mongoose.Schema({
   natureType: { type: Array },
   interestType: { type: Array },
   password: { type: String },        
-  googleId: { type: String }
-}, { timeseries: true });
+  googleId: { type: String },        
+  createdAt: { type: Date, default: Date.now }
+});
 
 export const User = mongoose.model('User', userSchema);
 
