@@ -38,7 +38,7 @@ export const register = async (req, res) => {
     // Then only changes can be made in server side and client side will not have access to it.
 
   } catch (err) {
-    res.status(500).json({ error: "Error registering user" });
+    res.status(500).json({ message: "Error registering user" });
   }
 };
 
@@ -49,7 +49,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid username" });
 
-    const match = bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: "Incorrect password" });
 
     const token = user.generateAccessToken();
@@ -64,7 +64,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ error: "Login failed", details: err.message } );
+    res.status(500).json({ message: "Login failed" });
   }
 };
 

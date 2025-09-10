@@ -7,7 +7,6 @@ import { useUser } from "../../GlobalUserContext.jsx";
 
 const SignupSection = ({ setstate }) => {
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -61,11 +60,6 @@ const SignupSection = ({ setstate }) => {
       return;
     }
 
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
-      return;
-    }
-
     try {
       const res = await fetch(BASE + "/register", {
         method: "POST",
@@ -82,7 +76,7 @@ const SignupSection = ({ setstate }) => {
         localStorage.setItem("userToken", data.token);
         dispatch({ type: "SET_USER", payload: data.user });
       } else {
-        toast.error("Signup failed.");
+        toast.error(data.message);
       }
     } catch (err) {
       toast.error("Signup failed. Please try again.");
@@ -168,14 +162,6 @@ const SignupSection = ({ setstate }) => {
           One special character
         </li>
       </ul>
-
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        className={styles.inputField}
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
 
       <div className={styles.linksContainer}>
         <div className={styles.link} onClick={() => setstate(0)}>
