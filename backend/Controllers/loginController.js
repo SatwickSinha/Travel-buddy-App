@@ -77,7 +77,7 @@ export const login = async (req, res) => {
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"]; // Altermatively we can use cookies to store token
   const token = authHeader?.split(" ")[1];
-
+  
   if (!token) return res.status(401).json({ message: "No token provided" });
 
   try {

@@ -26,15 +26,9 @@ mongoose
 app.use("/auth", oauthRoutes);
 app.post("/register", register);
 app.post("/login", login);
-app.get("/profile", verifyToken, (req, res) => {
-  res.json({
-    message: "Profile access granted",
-    user: req.user,
-  });
-});
 
+app.get("/profile", verifyToken, getUserProfile);
 app.post("/updateProfile", verifyToken, updateProfile);
-app.get("/getUserProfile", verifyToken, getUserProfile);
 
 app.post("/upload", verifyToken, upload.single("file"), uploadFile);
 
