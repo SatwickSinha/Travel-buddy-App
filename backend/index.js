@@ -28,7 +28,7 @@ app.post("/register", register);
 app.post("/login", login);
 
 app.get("/profile", verifyToken, getUserProfile);
-app.post("/updateProfile", verifyToken, updateProfile);
+app.put("/updateProfile", verifyToken, updateProfile);
 
 app.post("/upload", verifyToken, upload.single("file"), uploadFile);
 

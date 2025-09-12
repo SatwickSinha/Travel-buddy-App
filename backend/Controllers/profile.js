@@ -21,6 +21,7 @@ export const updateProfile = async (req, res) => {
     const userId = req.user._id;
 
     const {
+      name,
       dob,
       gender,
       drinking,
@@ -38,6 +39,7 @@ export const updateProfile = async (req, res) => {
     } = req.body;
 
     const updateData = {
+      name,
       dob,
       gender,
       drinking,
