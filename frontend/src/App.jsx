@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet  } from "react-router-dom";
 import LoginPage from "./pages/Login/LoginPage";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Dashboard from "./pages/Dashboard";
+import ProfilePage from "./pages/Profile/ProfilePage";
 import TravelDating from "./pages/Swipe/TravelDating";
 // import TravelBuddyFinder from "./pages/Swipe/TravelBuddyFinder";
 import AddTravelDetails from "./pages/AddDetails/AddTravelDetails";
@@ -27,7 +27,7 @@ function App() {
         <Route path="/CreateProfile" element={<AddProfile />} />
       {userLoggedIn && (
         <Route element={<LayoutWithNavbar />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/AddTrip" element={<AddTravelDetails />} />
         </Route>
       )}

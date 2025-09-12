@@ -6,7 +6,7 @@ import { login, register, verifyToken } from "./Controllers/loginController.js";
 import { updateProfile, getUserProfile } from "./Controllers/profile.js";
 
 // For file import and upload using multer and cloudinary
-import { upload } from "../middleware/multer_middleware.js";
+import { upload } from "./middleware/multer_middleware.js";
 import uploadFile from "./Controllers/upload.js";
 
 import dotenv from "dotenv";
@@ -26,15 +26,9 @@ mongoose
 app.use("/auth", oauthRoutes);
 app.post("/register", register);
 app.post("/login", login);
-app.get("/profile", verifyToken, (req, res) => {
-  res.json({
-    message: "Profile access granted",
-    user: req.user,
-  });
-});
 
-app.post("/updateProfile", verifyToken, updateProfile);
-app.get("/getUserProfile", verifyToken, getUserProfile);
+app.get("/profile", verifyToken, getUserProfile);
+app.put("/updateProfile", verifyToken, updateProfile);
 
 app.post("/upload", verifyToken, upload.single("file"), uploadFile);
 

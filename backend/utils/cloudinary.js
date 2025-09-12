@@ -16,6 +16,8 @@ const uploadOnCloudinary = async (filepath) => {
     });
 
     // Want to keep file locally (so don’t delete until working tested)
+    // fs.unlinkSync(filepath);
+    
     return response;
   } catch (error) {
     if (fs.existsSync(filepath)) {
