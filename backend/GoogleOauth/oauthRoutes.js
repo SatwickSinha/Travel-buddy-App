@@ -19,7 +19,7 @@ router.post('/google/token', async (req, res) => {
     });
     const payload = ticket.getPayload();
 
-    let user = await User.findOne({ googleId: payload.sub });
+    let user = await User.findOne({ "$or": [ { "email": payload.email }, { "googleId": payload.sub } ] });
     if (!user) {
       isUserNew = true;
       user = new User({
@@ -36,7 +36,7 @@ router.post('/google/token', async (req, res) => {
       { expiresIn: '1h' }
     );
     res.json({
-      message: 'Google OAuth successful',
+      message: 'Login successful',
       token,
       user: {
         id: user._id,

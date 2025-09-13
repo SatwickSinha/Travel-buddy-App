@@ -17,7 +17,7 @@ const LoginSection = ({ setstate }) => {
       if (isUserNew) {
         navigate("/CreateProfile");
       } else {
-        navigate("/dashboard");
+        navigate("/profile");
       }
     }
   }, [state, navigate]);
@@ -34,6 +34,7 @@ const LoginSection = ({ setstate }) => {
       const data = await res.json();
       if (res.ok) {
         toast.success("Login Successful");
+        setIsUserNew(data.isUserNew);
         localStorage.setItem("userToken", data.token);
         dispatch({ type: "SET_USER", payload: data.user });
       } else {

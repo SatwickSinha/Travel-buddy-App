@@ -1,6 +1,6 @@
 import fs from "fs";
 import uploadOnCloudinary from "../utils/cloudinary.js";
-import { ProfilePhoto } from "../Modules/Profile_photo.js";
+import { ProfilePhoto } from "../Modules/Schema.js";
 
 const uploadFile = async (req, res) => {
   try {

@@ -11,18 +11,29 @@ import {
   Book,
   Settings,
   Menu,
+  Plus,
 } from "lucide-react";
 import styles from "./NavBar.module.css";
 import { useEffect, useRef, useState } from "react";
 import useIsMobile from "../../isMobile.js";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useUser } from "../../GlobalUserContext.jsx";
 
 const NavBar = ({ components }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState({});
-  const isMobile = useIsMobile();  
-  const sidebarRef = useRef(null); 
+  const navigate = useNavigate();
+  const {state, dispatch} = useUser();
+  const [openMenu, setOpenMenu] = useState();
+  const isMobile = useIsMobile();
+  const sidebarRef = useRef(null);
   const [isOpen, setIsOpen] = useState(!isMobile);
-  const sidebarItems = [
-    { id: "home", label: "Home", icon: Home, active: false },
+  const dropdownRef = useRef(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+
+  const [sidebarItems, setSidebarItems] = useState([
+    { id: "home", label: "Home", icon: Home, active: false, route:"/profile" },
     {
       id: "trips",
       label: "Trips",
@@ -36,6 +47,16 @@ const NavBar = ({ components }) => {
       icon: Users,
       active: false,
       isSubItem: true,
+      parentItemId:"trips"
+    },
+    {
+      id: "create",
+      label: "Create a trip",
+      icon: Plus,
+      active: false,
+      isSubItem: true,
+      parentItemId:"trips",
+      route:"AddTrip"
     },
     { id: "buddies", label: "My buddies", icon: Heart, active: false },
     {
@@ -60,13 +81,10 @@ const NavBar = ({ components }) => {
       hasSubmenu: true,
     },
     { id: "itineraries", label: "Itineraries", icon: Book, active: false },
-  ];
+  ]);
 
-  const toggleSidebarDropDown = (itemId) => {
-    setSidebarCollapsed((prev) => ({
-      ...prev,
-      [itemId]: !prev[itemId],
-    }));
+  const toggleMenu = (label) => {
+    setOpenMenu((prev) => (prev === label ? "" : label));
   };
 
   const toggleSidebar = () => {
@@ -74,20 +92,58 @@ const NavBar = ({ components }) => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {     
-      if (isMobile && isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+    const handleClickOutside = (event) => {
+      if (
+        isMobile &&
+        isOpen &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobile, isOpen]);
+
+  const setActive = (id) => {
+    setSidebarItems(
+      sidebarItems.map((i) => {return { ...i, active: i.id === id, }}));
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    toast.info("Logging User Out");
+    setTimeout(() => {
+      sessionStorage.removeItem("userToken");
+      dispatch({ type: "CLEAR_USER" });
+      navigate("/", { replace: true });
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMobile, isOpen]);
+  }, [dropdownRef]);
 
   return (
     <div className={styles.container}>
-      <aside className={`${styles.sidebar} ${isOpen? styles.open : styles.close}` } ref={sidebarRef}>
+      <aside
+        className={`${styles.sidebar} ${isOpen ? styles.open : styles.close}`}
+        ref={sidebarRef}
+      >
         <div className={styles.sidebarHeader}>
           <div className={styles.logo}>
             <Plane size={24} className={styles.logoIcon} />
@@ -96,33 +152,37 @@ const NavBar = ({ components }) => {
         </div>
 
         <nav className={styles.sidebarNav}>
-          {sidebarItems.map((item) => (
-            <div key={item.id}>
-              <div
-                className={`${styles.sidebarItem} ${
-                  item.active ? styles.activeItem : ""
-                } ${item.isSubItem ? styles.subItem : ""}`}
-                onClick={() => item.hasSubmenu && toggleSidebarDropDown(item.id)}
-              >
-                <div className={styles.sidebarItemContent}>
-                  <item.icon size={18} />
-                  <span>{item.label}</span>
+          {sidebarItems.map(
+            (item) =>
+              (!item.isSubItem || (item.isSubItem && openMenu == item.parentItemId)) && (
+                <div key={item.id} onClick={() => setActive(item.id)}>
+                  <Link
+                    className={`${styles.sidebarItem} ${
+                      item.active ? styles.activeItem : ""
+                    } ${item.isSubItem ? styles.subItem : ""}`}
+                    onClick={() => item.hasSubmenu && toggleMenu(item.id)}
+                    to={item.route}
+                  >
+                    <div className={styles.sidebarItemContent}>
+                      <item.icon size={18} />
+                      <span>{item.label}</span>
+                    </div>
+                    {item.hasSubmenu && (
+                      <ChevronDown
+                        size={16}
+                        className={`${styles.submenuArrow} ${
+                          openMenu == item.id ? "" : styles.collapsed
+                        }`}
+                      />
+                    )}
+                  </Link>
                 </div>
-                {item.hasSubmenu && (
-                  <ChevronDown
-                    size={16}
-                    className={`${styles.submenuArrow} ${
-                      sidebarCollapsed[item.id] ? styles.collapsed : ""
-                    }`}
-                  />
-                )}
-              </div>
-            </div>
-          ))}
+              )
+          )}
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <button className={styles.logoutButton}>
+          <button className={styles.logoutButton} onClick={handleLogout}>
             <LogOut size={18} />
             Log out
           </button>
@@ -131,25 +191,30 @@ const NavBar = ({ components }) => {
 
       <div className={styles.mainContent}>
         <header className={styles.header}>
-            <button className={styles.headerButton} onClick={toggleSidebar}>
-              <Menu size={20} />
-            </button>
+          <button className={styles.headerButton} onClick={toggleSidebar}>
+            <Menu size={20} />
+          </button>
           <div className={styles.headerActions}>
-            <button className={styles.headerButton}>
-              <Calendar size={20} />
-            </button>
             <button className={styles.headerButton}>
               <Settings size={20} />
             </button>
             <button className={styles.headerButton}>
               <MessageSquare size={20} />
             </button>
-            <div className={styles.profileButton}>
+            <div className={styles.profileButton} ref={dropdownRef} onClick={toggleDropdown}>
               <img
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
                 alt="Profile"
-                className="profile-image"
+                className={styles.profileImage}
+                
               />
+              {isDropdownOpen && (
+                <div className={styles.dropdownContent}>
+                  <button className={styles.logoutBtn} onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>

@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 
 export const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select("-password -googleId");
+    const user = await User.findById(req.user.id).select("-password, -googleId");
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -15,13 +16,10 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-
 export const updateProfile = async (req, res) => {
   try {
-    const userId = req.user._id;
-
+    const userId = req.user.id;
     const {
-      name,
       dob,
       gender,
       drinking,
@@ -38,38 +36,36 @@ export const updateProfile = async (req, res) => {
       password
     } = req.body;
 
-    const updateData = {
-      name,
-      dob,
-      gender,
-      drinking,
-      smoking,
-      native,
-      phoneNo,
-      driving,
-      religion: religion || "",
-      bio: bio || "",
-      language,
-      locationPref,
-      natureType,
-      interestType,
-    };
-
-    // Only update password if provided
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true }).select("-password -googleId");
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        dob,
+        gender,
+        drinking,
+        smoking,
+        native,
+        phoneNo,
+        driving,
+        religion: religion || "",
+        bio: bio || "",
+        language,
+        locationPref,
+        natureType,
+        interestType,
+        password:hashedPassword
+      },
+      { new: true }
+    );
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Profile updated successfully", user: updatedUser });
+    res.status(200).json({ message: "Profile updated successfully" });
   } catch (error) {
-    console.error("Error updating profile:", error);
     res.status(500).json({ message: "Failed to update profile" });
+    console.log(error);
+    
   }
 };
-

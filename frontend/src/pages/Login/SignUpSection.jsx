@@ -11,11 +11,11 @@ const SignupSection = ({ setstate }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const navigate = useNavigate();
-  const { state } = useUser();
+  const { state, dispatch } = useUser();
 
   useEffect(() => {
     if (state.user != null && typeof state.user.username != "undefined") {
-      navigate("/addProfile");
+      navigate("/CreateProfile");
     }
   }, [state, navigate]);
 
@@ -72,13 +72,15 @@ const SignupSection = ({ setstate }) => {
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success("Signup successful! Please log in.");
+        toast.success("Signup successful!");
         localStorage.setItem("userToken", data.token);
         dispatch({ type: "SET_USER", payload: data.user });
       } else {
         toast.error(data.message);
       }
     } catch (err) {
+      console.log(err);
+      
       toast.error("Signup failed. Please try again.");
     }
   };

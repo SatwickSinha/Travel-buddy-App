@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
-
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -25,20 +23,27 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-userSchema.methods.generateAccessToken = function() {
-  return jwt.sign({
-    _id : this._id,
-    name : this.name,
-    email : this.email
-  } , process.env.SECRET_KEY , {expiresIn : '1d'});
-}
+const profilePhotoSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  photoUrl: {
+    type: String,  // Cloudinary URL
+    required: true,
+  },
+  photo: {
+    data: Buffer,      // Actual file binary
+    contentType: String,
+  },
+  uploadedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-userSchema.methods.generateRefreshToken = function() {
-  return jwt.sign({
-    _id : this._id,
-  },process.env.REFRESH_SECRET_KEY , {expiresIn : '7d'});
-}
-
+export const ProfilePhoto = mongoose.model("ProfilePhoto", profilePhotoSchema);
 export const User = mongoose.model('User', userSchema);
 
 

@@ -1,25 +1,23 @@
-.profile-container {
+.profileContainer {
   display: flex;
+  flex-direction: row;
   gap: 40px;
   padding: 30px;
   font-family: Arial, sans-serif;
 }
-
-.left-section {
+.leftSection {
   flex: 1;
   max-width: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .label {
   font-weight: bold;
   margin-bottom: 5px;
   align-self: flex-start;
 }
-
-.profile-pic-wrapper {
+.profilePicWrapper {
   position: relative;
   width: 150px;
   height: 150px;
@@ -29,25 +27,22 @@
   justify-content: center;
   border-radius: 8px;
 }
-
-.profile-pic {
-  width: 100%;
+.profilePic {
+  height: 100%;
   border-radius: 8px;
 }
-
-.remove-pic {
+.removePic {
   position: absolute;
   top: 5px;
   right: 5px;
-  background: #ff4d4f;
+  background: #ff4d5096;
   color: white;
   border: none;
   font-size: 18px;
   border-radius: 50%;
   cursor: pointer;
 }
-
-.upload-btn {
+.uploadBtn {
   margin-top: 15px;
   padding: 8px 12px;
   border: none;
@@ -56,22 +51,19 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
-.password-section {
+.passwordSection {
   margin-top: 25px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
 }
-
-.password-section input {
+.passwordSection input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
-.change-pass-btn {
+.changePassBtn {
   padding: 10px;
   background: #222;
   color: white;
@@ -79,62 +71,57 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
-.right-section {
+.rightSection {
   flex: 3;
 }
-
 .tabs {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
-
+.cancelBtn {
+  margin-left: 20px;
+}
 .tab {
   margin-right: 15px;
   cursor: pointer;
   font-weight: 500;
 }
-
 .tab.active {
   border-bottom: 2px solid #0077ff;
   padding-bottom: 4px;
 }
-
-.add-user-btn {
+.addUserBtn {
   padding: 6px 10px;
   border: none;
   background: #0077ff;
   color: white;
   border-radius: 4px;
   cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
-
-.profile-form {
+.profileForm {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-
-.profile-form h3 {
+.profileForm h3 {
   margin-top: 20px;
   margin-bottom: 5px;
 }
-
-.profile-form input,
-.profile-form textarea {
+.profileForm input,
+.profileForm textarea {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
   width: 100%;
 }
-
-.profile-form textarea {
+.profileForm textarea {
   min-height: 100px;
 }
-
-.save-btn {
+.saveBtn {
   margin-top: 20px;
   padding: 12px;
   background: #28a745;
@@ -143,33 +130,28 @@
   border-radius: 6px;
   cursor: pointer;
 }
-.form-row {
+.formRow {
   display: flex;
   align-items: center;
-  /* margin-bottom: 12px; */
 }
-
-.form-label {
+.formLabel {
   flex: 0 0 120px;
   font-weight: bold;
   color: #333;
 }
-
-.form-value {
+.formValue {
   flex: 1;
   margin-bottom: 10px;
   color: #444;
 }
-
-.form-row input,
-.form-row textarea {
+.formRow input,
+.formRow textarea {
   flex: 1;
   margin-bottom: 5px;
-
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-.toggle-btn {
+.toggleBtn {
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -177,9 +159,21 @@
   cursor: pointer;
   min-width: 60px;
 }
-
-.toggle-btn.active {
+.toggleBtn.active {
   background: #0077ff;
   color: white;
   border-color: #0077ff;
+}
+
+.passwordField{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+
+@media (max-width: 768px) {
+  .profileContainer{
+    flex-direction: column;
+  }
 }
