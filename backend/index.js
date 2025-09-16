@@ -1,13 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import multer from "multer";
+import { Server } from "socket.io";
+import http from "http";
 import oauthRoutes from "./GoogleOauth/oauthRoutes.js";
 import { login, register, verifyToken } from "./Controllers/loginController.js";
-import { updateProfile, getUserProfile } from "./Controllers/profile.js";
-
-// For file import and upload using multer and cloudinary
-import { upload } from "./middleware/multer_middleware.js";
-import uploadFile from "./Controllers/upload.js";
+import { updateProfile, getUserProfile, fetchAllUsers } from "./Controllers/profile.js";
+import { uploadFile, deleteFile } from "./Controllers/upload.js";
+import { chatHandler, handlePreviousChats } from "./Controllers/chatHandler.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -17,21 +18,32 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
 mongoose
   .connect(process.env.MONGODB)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 app.use("/auth", oauthRoutes);
 app.post("/register", register);
 app.post("/login", login);
 
 app.get("/profile", verifyToken, getUserProfile);
+app.get("/getAllProfile", verifyToken, fetchAllUsers);
 app.put("/updateProfile", verifyToken, updateProfile);
+app.post("/upload", verifyToken, upload.single("profilePhoto"), uploadFile);
+app.delete("/deletephoto", verifyToken, deleteFile);
 
-app.post("/upload", verifyToken, upload.single("file"), uploadFile);
+app.get("/messages/:chatId", verifyToken, handlePreviousChats);
+chatHandler(io);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+server.listen(PORT + 1, () => console.log("Server running on 3001"));

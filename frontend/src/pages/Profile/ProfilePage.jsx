@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./ProfilePage.module.css"; // <-- import as default
 import { BASE } from "../../../api";
 import { toast } from "react-toastify";
 import { useUser } from "../../GlobalUserContext";
-import { Edit2, Save } from "lucide-react";
+import { Edit2, MessageCircleMore, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const ProfilePage = () => {
+const ProfilePage = ({ userId }) => {
   const { state, dispatch } = useUser();
+  const [isMyPage, setIsMyPage] = useState(false);
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
+  const [userData, setUserData] = useState({
     name: "",
     dob: "",
     gender: "",
@@ -24,11 +26,17 @@ const ProfilePage = () => {
     pronouns: "",
     religion: "",
     bio: "",
+    photo:null,
+    locationPref:[],
+    natureType:[],
+    interestType:[],
   });
+  
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(BASE + "/profile", {
+        const res = await fetch(BASE + `/profile?id=${userId || state.user.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -38,8 +46,13 @@ const ProfilePage = () => {
           },
         });
         const data = await res.json();
-        if (res.ok) {
-          setFormData(data);
+        if (res.ok) {   
+          if (data._id != state.user.id){
+            setIsMyPage(false);
+          } else{
+            setIsMyPage(true);
+          }
+          setUserData(data);
         } else if (res.status === 403) {
           toast.error("Token Invalid Login Again");
           setTimeout(() => {
@@ -57,8 +70,11 @@ const ProfilePage = () => {
     fetchUserData();
   }, []);
   
+  
   const updateProfile = async () => {
     try {
+      const response = await fetch(BASE + "/updateProfile", {
+        method: "PUT",
       const response = await fetch(BASE + "/updateProfile", {
         method: "PUT",
         headers: {
@@ -66,7 +82,7 @@ const ProfilePage = () => {
           Accept: "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(userData),
       });
 
       if (!response.ok) {
@@ -77,6 +93,7 @@ const ProfilePage = () => {
       const data = await response.json();
       console.log("Profile updated successfully:", data);
     } catch (error) {
+      toast.error("Some Error Occured");
       console.error("Error updating profile:", error);
     }
   };
@@ -87,13 +104,22 @@ const ProfilePage = () => {
       <div className={styles.leftSection}>
         <div className={styles.profilePicWrapper}>
           <img
-            src="https://res.cloudinary.com/dgbtuxnex/image/upload/v1757017132/dmsknlgc5zt1knqfwkl6.jpg"
+            src={userData.photo}
             alt="profile"
             className={styles.profilePic}
           />
-          <button className={styles.removePic}>×</button>
+          {isMyPage && (<button className={styles.removePic} onClick={handleDeleteButton}>×</button>)}
         </div>
-        <button className={styles.uploadBtn}>Upload Photo</button>
+        <div>
+          {isMyPage && (<><button className={styles.uploadBtn} onClick={handleButtonClick}>Upload Profile Photo</button>
+          <input
+            type="file"
+            accept=".png, .jpg, .jpeg"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          /></>)}
+        </div>
         
       </div>
       {/* Right Section */}
@@ -102,9 +128,10 @@ const ProfilePage = () => {
           <div className={styles.tabs}>
             <h3>Basic Details</h3>
             <div>
-              {editMode
+              {isMyPage
+              ?editMode
                 ? <div style={{ display: "flex", flexDirection: "row" }}>
-                  <div className={styles.addUserBtn}>
+                  <div className={styles.addUserBtn} onClick={() => {updateProfile(); setEditMode(false)}}>
                     <Save size={15} />
                     Save
                   </div>
@@ -113,6 +140,7 @@ const ProfilePage = () => {
                   </button>
                 </div>
                 : <button className={styles.addUserBtn} onClick={() => setEditMode(true)}><Edit2 size={17} /> Edit</button>
+              : <button className={styles.addUserBtn} onClick={startChatting}><MessageCircleMore size={17} /> Start Chat</button>
               }
             </div>
           </div>
@@ -122,13 +150,28 @@ const ProfilePage = () => {
             {editMode ? (
               <input
                 type="text"
-                value={formData.name}
+                value={userData.name}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                  setUserData({ ...userData, name: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.name}</span>
+              <span className={styles.formValue}>{userData.name}</span>
+            )}
+          </div>
+          {/* Phone No */}
+          <div className={styles.formRow}>
+            <label className={styles.formLabel}>Phone No : </label>
+            {editMode ? (
+              <input
+                type="text"
+                value={userData.phoneNo}
+                onChange={(e) =>
+                  setUserData({ ...userData, phoneNo: e.target.value })
+                }
+              />
+            ) : (
+              <span className={styles.formValue}>{userData.phoneNo}</span>
             )}
           </div>
           {/* Date of Birth */}
@@ -137,13 +180,13 @@ const ProfilePage = () => {
             {editMode ? (
               <input
                 type="date"
-                value={formData.dob}
+                value={userData.dob}
                 onChange={(e) =>
-                  setFormData({ ...formData, dob: e.target.value })
+                  setUserData({ ...userData, dob: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.dob}</span>
+              <span className={styles.formValue}>{userData.dob}</span>
             )}
           </div>
           {/* Gender */}
@@ -152,29 +195,29 @@ const ProfilePage = () => {
             {editMode ? (
               <input
                 type="text"
-                value={formData.gender}
+                value={userData.gender}
                 onChange={(e) =>
-                  setFormData({ ...formData, gender: e.target.value })
+                  setUserData({ ...userData, gender: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.gender}</span>
+              <span className={styles.formValue}>{userData.gender}</span>
             )}
           </div>
           {/* Profile Rating */}
           <div className={styles.formRow}>
             <label className={styles.formLabel}>Profile Rating :</label>
-            <span className={styles.formValue}>{formData.profileRating}</span>
+            <span className={styles.formValue}>{userData.profileRating}</span>
           </div>
           {/* Email */}
-          <div className={styles.formRow}>
+          {isMyPage && (<><div className={styles.formRow}>
             <label className={styles.formLabel}>Email :</label>
-            <span className={styles.formValue}>{formData.email}</span>
+            <span className={styles.formValue}>{userData.email}</span>
           </div>
           <div className={styles.formRow}>
             <label className={styles.formLabel}>Password :</label>
             <div className={styles.passwordField}>{"*********** "} <Edit2 size={15}/></div>
-          </div>
+          </div></>)}
 
           <h3>Preferences</h3>
           {/* Drinking */}
@@ -183,16 +226,16 @@ const ProfilePage = () => {
             {editMode ? (
               <button
                 type="button"
-                className={`${styles.toggleBtn} ${formData.drinking ? styles.active : ""}`}
+                className={`${styles.toggleBtn} ${userData.drinking ? styles.active : ""}`}
                 onClick={() =>
-                  setFormData({ ...formData, drinking: !formData.drinking })
+                  setUserData({ ...userData, drinking: !userData.drinking })
                 }
               >
-                {formData.drinking ? "Yes" : "No"}
+                {userData.drinking ? "Yes" : "No"}
               </button>
             ) : (
               <span className={styles.formValue}>
-                {formData.drinking ? "Yes" : "No"}
+                {userData.drinking ? "Yes" : "No"}
               </span>
             )}
           </div>
@@ -202,16 +245,16 @@ const ProfilePage = () => {
             {editMode ? (
               <button
                 type="button"
-                className={`${styles.toggleBtn} ${formData.smoking ? styles.active : ""}`}
+                className={`${styles.toggleBtn} ${userData.smoking ? styles.active : ""}`}
                 onClick={() =>
-                  setFormData({ ...formData, smoking: !formData.smoking })
+                  setUserData({ ...userData, smoking: !userData.smoking })
                 }
               >
-                {formData.smoking ? "Yes" : "No"}
+                {userData.smoking ? "Yes" : "No"}
               </button>
             ) : (
               <span className={styles.formValue}>
-                {formData.smoking ? "Yes" : "No"}
+                {userData.smoking ? "Yes" : "No"}
               </span>
             )}
           </div>
@@ -221,16 +264,16 @@ const ProfilePage = () => {
             {editMode ? (
               <button
                 type="button"
-                className={`${styles.toggleBtn} ${formData.driving ? styles.active : ""}`}
+                className={`${styles.toggleBtn} ${userData.driving ? styles.active : ""}`}
                 onClick={() =>
-                  setFormData({ ...formData, driving: !formData.driving })
+                  setUserData({ ...userData, driving: !userData.driving })
                 }
               >
-                {formData.driving ? "Yes" : "No"}
+                {userData.driving ? "Yes" : "No"}
               </button>
             ) : (
               <span className={styles.formValue}>
-                {formData.driving ? "Yes" : "No"}
+                {userData.driving ? "Yes" : "No"}
               </span>
             )}
           </div>
@@ -240,28 +283,13 @@ const ProfilePage = () => {
             {editMode ? (
               <input
                 type="text"
-                value={formData.native}
+                value={userData.native}
                 onChange={(e) =>
-                  setFormData({ ...formData, native: e.target.value })
+                  setUserData({ ...userData, native: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.native}</span>
-            )}
-          </div>
-          {/* Phone No */}
-          <div className={styles.formRow}>
-            <label className={styles.formLabel}>Phone No : </label>
-            {editMode ? (
-              <input
-                type="text"
-                value={formData.phoneNo}
-                onChange={(e) =>
-                  setFormData({ ...formData, phoneNo: e.target.value })
-                }
-              />
-            ) : (
-              <span className={styles.formValue}>{formData.phoneNo}</span>
+              <span className={styles.formValue}>{userData.native}</span>
             )}
           </div>
           {/* Pronouns */}
@@ -270,13 +298,13 @@ const ProfilePage = () => {
             {editMode ? (
               <input
                 type="text"
-                value={formData.pronouns}
+                value={userData.pronouns}
                 onChange={(e) =>
-                  setFormData({ ...formData, pronouns: e.target.value })
+                  setUserData({ ...userData, pronouns: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.pronouns}</span>
+              <span className={styles.formValue}>{userData.pronouns}</span>
             )}
           </div>
           {/* Religion */}
@@ -285,27 +313,66 @@ const ProfilePage = () => {
             {editMode ? (
               <input
                 type="text"
-                value={formData.religion}
+                value={userData.religion}
                 onChange={(e) =>
-                  setFormData({ ...formData, religion: e.target.value })
+                  setUserData({ ...userData, religion: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.religion}</span>
+              <span className={styles.formValue}>{userData.religion}</span>
             )}
+          </div>
+          {/* Location */}
+          <div className={styles.activitiesGrid}>
+          <label className={styles.formLabel}>Liked Locations </label>
+            {userData.locationPref.map((activity) => (
+              <button
+                key={activity}
+                type="button"
+                className={`${styles.activityButton} ${styles.activityActive}`}
+              >
+                {activity}
+              </button>
+            ))}
+          </div>
+          {/* nature */}
+          <div className={styles.activitiesGrid}>
+          <label className={styles.formLabel}>Your Nature </label>
+            {userData.natureType.map((activity) => (
+              <button
+                key={activity}
+                type="button"
+                className={`${styles.activityButton} ${styles.activityActive}`}
+              >
+                {activity}
+              </button>
+            ))}
+          </div>
+          {/* intrests */}
+          <div className={styles.activitiesGrid}>
+          <label className={styles.formLabel}>Your Intrests </label>
+            {userData.interestType.map((activity) => (
+              <button
+                key={activity}
+                type="button"
+                className={`${styles.activityButton} ${styles.activityActive}`}
+              >
+                {activity}
+              </button>
+            ))}
           </div>
           <h3>About</h3>
           <div className={styles.formRow}>
             <label className={styles.formLabel}>Bio :</label>
             {editMode ? (
               <textarea
-                value={formData.bio}
+                value={userData.bio}
                 onChange={(e) =>
-                  setFormData({ ...formData, bio: e.target.value })
+                  setUserData({ ...userData, bio: e.target.value })
                 }
               />
             ) : (
-              <span className={styles.formValue}>{formData.bio}</span>
+              <span className={styles.formValue}>{userData.bio}</span>
             )}
           </div>
         </form>
