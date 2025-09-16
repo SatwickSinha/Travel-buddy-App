@@ -1,3 +1,4 @@
+import e from "express";
 import { User } from "../Modules/Schema.js";
 import bcrypt from "bcrypt";
 
@@ -20,6 +21,7 @@ export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const {
+      name,
       dob,
       gender,
       drinking,
@@ -36,10 +38,15 @@ export const updateProfile = async (req, res) => {
       password
     } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
+        name,
         dob,
         gender,
         drinking,
@@ -53,7 +60,7 @@ export const updateProfile = async (req, res) => {
         locationPref,
         natureType,
         interestType,
-        password:hashedPassword
+        ...(hashedPassword && { password: hashedPassword })
       },
       { new: true }
     );
@@ -62,10 +69,8 @@ export const updateProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Profile updated successfully" });
+    res.status(200).json({ message: "Profile updated successfully", user: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "Failed to update profile" });
-    console.log(error);
-    
+    res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 };

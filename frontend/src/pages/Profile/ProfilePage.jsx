@@ -56,23 +56,31 @@ const ProfilePage = () => {
     };
     fetchUserData();
   }, []);
+  
   const updateProfile = async () => {
     try {
-      const response = await fetch(BASE + "/login", {
-        method: "POST",
+      const response = await fetch(BASE + "/updateProfile", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Origin: "*",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
         body: JSON.stringify(formData),
       });
-      console.log("Profile updated successfully:", response.data);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update profile");
+      }
+
+      const data = await response.json();
+      console.log("Profile updated successfully:", data);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
   };
+
   return (
     <div className={styles.profileContainer}>
       {/* Left Section */}
