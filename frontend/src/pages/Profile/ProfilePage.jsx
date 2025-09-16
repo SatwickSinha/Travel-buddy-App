@@ -75,15 +75,13 @@ const ProfilePage = ({ userId }) => {
     try {
       const response = await fetch(BASE + "/updateProfile", {
         method: "PUT",
-      const response = await fetch(BASE + "/updateProfile", {
-        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
         body: JSON.stringify(userData),
-      });
+      })
 
       if (!response.ok) {
         const errorData = await response.json();
