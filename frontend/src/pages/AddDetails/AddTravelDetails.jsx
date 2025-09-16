@@ -1,9 +1,5 @@
 import React, { useState } from "react";
 import {
-  Calendar,
-  MessageSquare,
-  Settings,
-  X,
   Save,
   Coffee,
   Mountain,
@@ -250,59 +246,6 @@ const AddTravelDetails = () => {
                   onChange={(e) => handleInputChange("notes", e.target.value)}
                   placeholder="Additional notes or preferences"
                   rows="4"
-                />
-              </div>
-
-              {/* Accommodation Details */}
-              <div className={styles.sectionTitle}>Accommodation details</div>
-
-              {/* Hotel Name */}
-              <div className={styles.formGroup}>
-                <label className={styles.label}>Hotel name</label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={formData.hotelName}
-                  onChange={(e) =>
-                    handleInputChange("hotelName", e.target.value)
-                  }
-                  placeholder="Hotel or accommodation name"
-                />
-              </div>
-
-              {/* Check-in Date */}
-              <div className={styles.formGroup}>
-                <label className={styles.label}>Check-in date</label>
-                <input
-                  type="date"
-                  className={styles.input}
-                  value={formData.checkIn}
-                  onChange={(e) => handleInputChange("checkIn", e.target.value)}
-                />
-              </div>
-
-              {/* Check-out Date */}
-              <div className={styles.formGroup}>
-                <label className={styles.label}>Check-out date</label>
-                <input
-                  type="date"
-                  className={styles.input}
-                  value={formData.checkOut}
-                  onChange={(e) =>
-                    handleInputChange("checkOut", e.target.value)
-                  }
-                />
-              </div>
-
-              {/* Booking */}
-              <div className={styles.formGroup}>
-                <label className={styles.label}>Booking</label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={formData.booking}
-                  onChange={(e) => handleInputChange("booking", e.target.value)}
-                  placeholder="Booking reference or platform"
                 />
               </div>
             </div>

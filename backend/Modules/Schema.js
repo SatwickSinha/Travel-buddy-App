@@ -20,30 +20,28 @@ const userSchema = new mongoose.Schema({
   interestType: { type: Array },
   password: { type: String },        
   googleId: { type: String },        
+  photo: { data: Buffer, contentType: String },
   createdAt: { type: Date, default: Date.now }
 });
 
-const profilePhotoSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  photoUrl: {
-    type: String,  // Cloudinary URL
-    required: true,
-  },
-  photo: {
-    data: Buffer,      // Actual file binary
-    contentType: String,
-  },
-  uploadedAt: {
-    type: Date,
-    default: Date.now,
-  },
+const messageSchema = new mongoose.Schema({
+  chatId: String, // unique room id (e.g. user1_user2)
+  sender: String, // userId or email
+  receiver: String, // userId or email
+  text: String,
+  createdAt: { type: Date, default: Date.now },
 });
 
-export const ProfilePhoto = mongoose.model("ProfilePhoto", profilePhotoSchema);
+const notificationSchema = new mongoose.Schema({
+  userId: String, // who should receive it
+  from: String,   // sender
+  text: String,
+  createdAt: { type: Date, default: Date.now },
+  delivered: { type: Boolean, default: false }
+});
+
+export const Message = mongoose.model("Message", messageSchema);
+export const Notifications = mongoose.model("Notification", notificationSchema);
 export const User = mongoose.model('User', userSchema);
 
 

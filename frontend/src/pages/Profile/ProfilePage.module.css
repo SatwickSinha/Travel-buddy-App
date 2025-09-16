@@ -171,6 +171,37 @@
   gap: 20px;
 }
 
+.activitiesGrid {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.activityButton {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  text-align: center;
+  max-width: fit-content;
+}
+
+.activityButton:hover {
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+.activityActive {
+  background-color: #dbeafe;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  font-weight: 500;
+  transform: translateY(-1px);
+}
 
 @media (max-width: 768px) {
   .profileContainer{

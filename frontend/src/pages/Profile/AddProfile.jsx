@@ -189,7 +189,7 @@ const AddProfile = () => {
 
     try {
       const res = await fetch(BASE + "/updateProfile", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

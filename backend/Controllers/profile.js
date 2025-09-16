@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password, -googleId");
+    const user = await User.findById(req.query.id).select("-password, -googleId");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -69,3 +69,18 @@ export const updateProfile = async (req, res) => {
     
   }
 };
+
+export const fetchAllUsers = async (req, res) => {
+  try {
+    const user = await User.find().select("-password, -googleId");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("Error fetching user profile:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

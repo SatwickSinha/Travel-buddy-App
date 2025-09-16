@@ -33,7 +33,7 @@ const NavBar = ({ components }) => {
 
 
   const [sidebarItems, setSidebarItems] = useState([
-    { id: "home", label: "Home", icon: Home, active: false, route:"/profile" },
+    { id: "home", label: "Home", icon: Home, active: false, route:`/profile` },
     {
       id: "trips",
       label: "Trips",

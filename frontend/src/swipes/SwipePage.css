@@ -1,0 +1,101 @@
+/* src/pages/SwipePage.css */
+.swipe-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background: #f3f3f3;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  margin: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.card-container {
+  position: relative;
+  width: 320px;
+  height: 500px;
+}
+
+.card {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: absolute;
+}
+
+.card-image {
+  width: 100%;
+  height: 65%;
+  object-fit: cover;
+}
+
+.card-details {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-details h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.bio {
+  margin: 8px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.tag.blue {
+  background-color: #3498db;
+}
+
+.tag.green {
+  background-color: #2ecc71;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 30px;
+}
+
+.btn {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+.btn.dislike {
+  background-color: #e74c3c;
+}
+
+.btn.like {
+  background-color: #2ecc71;
+}
