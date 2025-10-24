@@ -41,7 +41,7 @@ const LoginSection = ({ setstate }) => {
         toast.error(data.message);
       }
     } catch (err) {
-      toast.error("Login failed. Please try again.");
+      toast.error(`Login failed ${err.message}. Please try again.`);
     }
   };
 

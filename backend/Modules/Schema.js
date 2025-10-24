@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
   interestType: { type: Array },
   password: { type: String },        
   googleId: { type: String },        
-  photo: { data: Buffer, contentType: String },
+  photo: {
+    data: Buffer,
+    contentType: String,
+    url: String
+  },
   createdAt: { type: Date, default: Date.now }
 });
 

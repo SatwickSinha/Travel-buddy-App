@@ -1,6 +1,6 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, useState, useEffect } from 'react';
 
-const UserContext = createContext(null); // explicitly set null for clarity
+const UserContext = createContext(null);
 
 const initialState = {
   user: JSON.parse(localStorage.getItem('userData')) || null,
@@ -19,8 +19,10 @@ const userReducer = (state, action) => {
 
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
+  const [likedCards, setLikedCards] = useState([]); // Use it for chatting as well Suu
+  const [dislikedCards, setDislikedCards] = useState([]); 
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (state.user) {
       localStorage.setItem('userData', JSON.stringify(state.user));
     } else {
@@ -29,7 +31,9 @@ export const UserProvider = ({ children }) => {
   }, [state.user]);
 
   return (
-    <UserContext.Provider value={{ state, dispatch }}>
+    <UserContext.Provider
+      value={{ state, dispatch, likedCards, setLikedCards, dislikedCards, setDislikedCards }}
+    >
       {children}
     </UserContext.Provider>
   );

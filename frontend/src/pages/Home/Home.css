@@ -1,0 +1,56 @@
+/* Center the cards with flexbox */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  position: relative;
+  background: #f5f7fa; /* light background for contrast */
+}
+
+/* Each card stacked */
+.card {
+  position: absolute;
+  border: none; /* remove harsh border */
+  border-radius: 16px;
+  height: 500px;
+  width: 380px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* soft subtle shadow */
+  background: #eefafc;
+  cursor: grab;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Hover effect for nicer feel */
+.card:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Card image as div with background */
+.card-image {
+  height: 70%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* Text at the bottom of card */
+.card-text {
+  padding: 16px;
+  text-align: left;
+  font-family: Arial, sans-serif;
+}
+
+.card-text h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card-text p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 14px;
+}
