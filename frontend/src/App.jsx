@@ -4,7 +4,7 @@ import LoginPage from "./pages/Login/LoginPage";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfilePage from "./pages/Profile/ProfilePage";
-import TravelDating from "./pages/Swipe/TravelDating";
+// import TravelDating from "./pages/Swipe/TravelDating";
 // import TravelBuddyFinder from "./pages/Swipe/TravelBuddyFinder";
 import AddTravelDetails from "./pages/AddDetails/AddTravelDetails";
 import AddProfile from "./pages/Profile/AddProfile";
@@ -14,7 +14,7 @@ import Chat from "./pages/Chats/Chatting";
 import socket from "./socket";
 import { useEffect } from "react";
 import { useState } from "react";
-import SwipePage from "./swipes/Swipe";
+import Home from "./pages/Home/Home";
 
 function App() {
   const { state } = useUser();
@@ -49,14 +49,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
-        <Route path="/findTravel" element={<TravelDating />} />
+        {/* <Route path="/findTravel" element={<TravelDating />} /> */}
         <Route path="/CreateProfile" element={<AddProfile />} />
       {userLoggedIn && (
         <Route element={<LayoutWithNavbar />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/AddTrip" element={<AddTravelDetails />} />
           <Route path="/chat/:otherUserId" element={<Chat setActiveChatId={setActiveChatId} />} />
-          <Route path="/swipe" element={<SwipePage />} />
+          <Route path="/Home" element={<Home />} />
         </Route>
       )}
       </Routes>

@@ -19,6 +19,7 @@
   color: white;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   left: 0;
   top: 0;
   z-index: 100;
@@ -65,20 +66,6 @@
 .sidebarNav {
   flex: 1;
   padding: 1rem 0;
-  overflow-y: auto;
-}
-
-.sidebarNav::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebarNav::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.sidebarNav::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
 }
 
 .sidebarItem {

@@ -9,6 +9,7 @@ import { login, register, verifyToken } from "./Controllers/loginController.js";
 import { updateProfile, getUserProfile, fetchAllUsers } from "./Controllers/profile.js";
 import { uploadFile, deleteFile } from "./Controllers/upload.js";
 import { chatHandler, handlePreviousChats } from "./Controllers/chatHandler.js";
+import { getRecommendations } from "./Controllers/Recommendation.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -38,6 +39,7 @@ app.get("/getAllProfile", verifyToken, fetchAllUsers);
 app.put("/updateProfile", verifyToken, updateProfile);
 app.post("/upload", verifyToken, upload.single("profilePhoto"), uploadFile);
 app.delete("/deletephoto", verifyToken, deleteFile);
+app.get("/recommendations", verifyToken,getRecommendations);
 
 app.get("/messages/:chatId", verifyToken, handlePreviousChats);
 chatHandler(io);

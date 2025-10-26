@@ -4,6 +4,13 @@ import {
   Coffee,
   Mountain,
   Book,
+  Landmark,
+  Crown,
+  Car,
+  Leaf,
+  Wallet,
+  Heart,
+  Briefcase,
 } from "lucide-react";
 import styles from "./AddTravelDetails.module.css";
 import { toast } from "react-toastify";
@@ -15,37 +22,50 @@ const AddTravelDetails = () => {
     groupSize: "",
     activities: [],
     contact: "",
-    checkIn: "",
-    checkOut: "",
-    hotelName: "",
     totalCost: "",
     travelDate: "",
     budget: "",
     notes: "",
-    booking: "",
   });
 
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   const tripTypes = [
     { id: "Adventure", label: "Adventure", icon: Mountain },
-    { id: "Relaxation", label: "Relaxation", icon: Coffee },
-    { id: "Cultural", label: "Cultural", icon: Book },
+    { id: "Relaxation", label: "Relaxation", icon: Coffee }, // Or 'Bed', 'Sailboat'
+    { id: "Cultural", label: "Cultural", icon: Landmark }, // Or 'BookOpen', 'Museum'
+    { id: "Luxury", label: "Luxury", icon: Crown }, // Or 'Diamond'
+    { id: "Road Trip", label: "Road Trip", icon: Car }, // Or 'Map'
+    { id: "Nature", label: "Nature", icon: Leaf }, // Or 'Tent', 'Trees'
+    { id: "Budget", label: "Budget", icon: Wallet }, // Or 'Wallet'
+    { id: "Romantic", label: "Romantic", icon: Heart }, // Or 'Ring'
+    { id: "Business", label: "Business", icon: Briefcase }, // Or 'Users'
   ];
 
   const activityOptions = [
     "Hiking",
-    "Swimming",
     "Photography",
     "Food Tours",
-    "Museums",
-    "Shopping",
     "Nightlife",
+    "Rafting",
     "Beach Activities",
     "Adventure Sports",
     "Cultural Sites",
+    "Stargazing",
+    "Shopping",
+    "Museums",
     "Nature Tours",
     "City Tours",
+    "Spa",
+    "Concerts",
+    "Snowboarding",
+    "Historical Walks",
+    "Volunteering",
+    "Swimming",
+    "Brewery Tours",
+    "Fishing/Boating",
+    "Art Galleries",
+    "Zoos/Aquariums",
   ];
 
   const handleInputChange = (field, value) => {
@@ -178,7 +198,10 @@ const AddTravelDetails = () => {
                   ))}
                 </div>
               </div>
+            </div>
 
+            {/* Right Column */}
+            <div className={styles.rightColumn}>
               {/* Contact */}
               <div className={styles.formGroup}>
                 <label className={styles.label}>Contact</label>
@@ -197,13 +220,15 @@ const AddTravelDetails = () => {
                 <input
                   type="number"
                   className={styles.input}
-                  value={formData.totalCost || formData.budget*formData.groupSize}
+                  value={
+                    formData.totalCost || formData.budget * formData.groupSize
+                  }
                   onChange={(e) =>
                     handleInputChange("totalCost", e.target.value)
                   }
                   placeholder="Total trip cost"
                   min="0"
-                  step="0.01"
+                  step="1"
                 />
               </div>
 
@@ -213,17 +238,16 @@ const AddTravelDetails = () => {
                 <input
                   type="number"
                   className={styles.input}
-                  value={formData.budget || (formData.totalCost/formData.groupSize).toFixed(0)}
+                  value={
+                    formData.budget ||
+                    (formData.totalCost / formData.groupSize).toFixed(0)
+                  }
                   onChange={(e) => handleInputChange("budget", e.target.value)}
                   placeholder="Budget per person"
                   min="0"
                   step="0.01"
                 />
               </div>
-            </div>
-
-            {/* Right Column */}
-            <div className={styles.rightColumn}>
               {/* Trip Information */}
               <div className={styles.formGroup}>
                 <label className={styles.label}>Travel date</label>
